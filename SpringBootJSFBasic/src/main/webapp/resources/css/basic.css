@@ -1,0 +1,8 @@
+.ui-panel {
+	margin: 50px;
+	width: 200px;
+}
+
+#formStudent\:allStudents, #formStudent\:selectedStudentsTable {
+	width: 600px;
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>可拖放的组件学习</title>
+	<h:outputStylesheet library="css" name="basic.css" />
+	<h:outputScript library="js" name="basic.js" />
+</h:head>
+<h:body>
+	<p:panel id="dragblePanel" header="请点这里拖动我">
+		<h:outputText value="我是一个只能通过标题栏拖放的面板。" />
+		<h:outputText value="我会回到原处。" />
+		<h:outputText value="我的不透明度是30%。" />
+	</p:panel>
+	<p:draggable for="dragblePanel" handle=".ui-panel-titlebar"
+		revert="true" opacity="0.3" />
+
+
+	<h:form id="formStudent">
+		<p:fieldset id="allStudentsField" legend="全体学生">
+			<p:dataTable id="allStudents" value="${studentView.students}"
+				var="student">
+				<p:column style="width:20px">
+					<h:outputText id="dragIcon" styleClass="fa fa-fw fa-plus" />
+					<p:draggable for="dragIcon" revert="true" helper="clone" />
+				</p:column>
+				<p:column headerText="ID">
+					<h:outputText value="${student.id}" />
+				</p:column>
+				<p:column headerText="姓名" sortBy="${student.name}">
+					<h:outputText value="${student.name}" />
+				</p:column>
+				<p:column headerText="年龄" sortBy="${student.age}">
+					<h:outputText value="${student.age}" />
+				</p:column>
+				<p:column headerText="特长">
+					<h:outputText value="${student.description}" />
+				</p:column>
+			</p:dataTable>
+		</p:fieldset>
+		<p:fieldset id="selectedStudents" legend="选出的学生"
+			style="margin-top:20px">
+			<p:outputPanel id="dropArea">
+				<h:outputText value="!!!放到这里!!!!"
+					rendered="${empty studentView.droppedStudents}"
+					style="font-size:24px;" />
+				<p:dataTable id="selectedStudentsTable" var="student"
+					value="${studentView.droppedStudents}"
+					rendered="${not empty studentView.droppedStudents}">
+					<p:column headerText="ID">
+						<h:outputText value="${student.id}" />
+					</p:column>
+					<p:column headerText="姓名" sortBy="${student.name}">
+						<h:outputText value="${student.name}" />
+					</p:column>
+					<p:column headerText="年龄" sortBy="${student.age}">
+						<h:outputText value="${student.age}" />
+					</p:column>
+					<p:column headerText="特长">
+						<h:outputText value="${student.description}" />
+					</p:column>
+				</p:dataTable>
+			</p:outputPanel>
+		</p:fieldset>
+		<p:droppable for="selectedStudents" tolerance="touch"
+			activeStyleClass="ui-state-highlight" datasource="allStudents"
+			onDrop="handleDrop">
+			<p:ajax listener="${studentView.onStudentDrop}"
+				update="dropArea allStudents" />
+		</p:droppable>
+	</h:form>
+</h:body>
+</html>

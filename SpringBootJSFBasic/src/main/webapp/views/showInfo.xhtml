@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+<h:body>
+	<h:form id="form">
+		<p:growl id="msgs" showDetail="true" />
+		<p:dataTable value="${studentView.students}" var="student"
+			selectionMode="single" rowKey="${student.id}">
+			<f:facet name="header">全体学生</f:facet>
+			<p:ajax event="rowSelect" listener="${studentView.onRowSelect}"
+				update=":form:msgs" />
+			<p:ajax event="rowUnselect" listener="${studentView.onRowUnselect}"
+				update=":form:msgs" />
+			<p:column headerText="姓名" sortBy="${student.name}">
+				<h:outputText value="${student.name}" />
+			</p:column>
+			<p:column headerText="年龄" sortBy="${student.age}">
+				<h:outputText value="${student.age}" />
+			</p:column>
+			<p:column headerText="特长">
+				<h:outputText value="${student.description}" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</h:body>
+</html>
